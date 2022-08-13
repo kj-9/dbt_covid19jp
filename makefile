@@ -3,9 +3,27 @@ SHELL=/bin/bash
 export DBT_PROFILES_DIR=./
 
 .PHONY:
-	doc-preview
 	run
-	export-all
+	seed
+	clean
+	db
+	docs
+	docs-nocompile
+	docs-preview
+	test
+	export
+	ga-commit
+
+run:
+	dbt run
+
+seed:
+	dbt seed
+
+clean:
+	dbt clean && rm -vf .db/*.duckdb
+
+db: clean seed run
 
 docs:
 	dbt docs generate
@@ -13,14 +31,13 @@ docs:
 docs-nocompile:
 	dbt docs generate --no-compile
 
-
 docs-preview:
 	dbt docs generate && dbt docs serve
 
-run:
-	dbt run
+test:
+	dbt test
 
-export-all:
+export:
 	dbt run-operation export \
 		--args "{ \
 			model_names: [jp_daily, pref, pref_daily], \
