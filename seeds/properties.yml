@@ -1,0 +1,30 @@
+version: 2
+
+seeds:
+- name: pref
+  description: |-
+    Master dataset for Japanese prefectures.
+    
+    Data Source:
+      - Statistics Bureau of Japan (xlsx file): https://www.stat.go.jp/data/nihon/zuhyou/n200200200.xlsx
+  columns:
+    - name: prefCode
+      description: Prefecture code, 都道府県番号
+      tests:
+        - unique
+        - not_null
+    - name: prefJP
+      description: Prefecture name in Japanese,	都道府県名(日本語)
+      tests:
+        - unique
+        - not_null
+    - name: prefEN
+      description: Prefecture name in English, 都道府県名(英語)
+      tests:
+        - unique
+        - not_null
+    - name: population
+      description: Population estimate in thousands in 2018, 2018 年推計人口(千人)
+      tests:
+        - unique
+        - not_null

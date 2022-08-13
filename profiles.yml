@@ -1,0 +1,7 @@
+dbt_covid19jp:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: '.db/temp.duckdb'
+      #optional fields
