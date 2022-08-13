@@ -35,7 +35,7 @@ docs-preview:
 	dbt docs generate && dbt docs serve
 
 test:
-	dbt test
+	dbt test --store-failures
 
 export:
 	dbt run-operation export \
