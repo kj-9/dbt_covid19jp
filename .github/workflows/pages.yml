@@ -31,7 +31,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: build docs
-      run: make docs
+        run: make docs
       - name: Setup Pages
         uses: actions/configure-pages@v1
       - name: Upload artifact
