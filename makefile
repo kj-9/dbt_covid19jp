@@ -4,8 +4,10 @@ SHELL=/bin/bash
 	run
 	export-all
 
+docs:
+	dbt docs generate --profiles-dir .
 
-doc-preview:
+docs-preview:
 	dbt docs generate --profiles-dir . &&  dbt docs serve --profiles-dir .
 
 run:
