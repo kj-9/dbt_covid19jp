@@ -33,5 +33,5 @@ clean-targets:         # directories to be removed by `dbt clean`
 # using the `{{ config(...) }}` macro.
 models:
   dbt_covid19jp:
-    +pre-hook: "INSTALL httpfs; LOAD httpfs;" # enable duckdb httpfs extension
+    +pre-hook: "{{ enable_httpfs() }}" # enable duckdb httpfs extension
     +materialized: view
