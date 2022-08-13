@@ -21,7 +21,11 @@ run:
 	dbt run
 
 export-all:
-	dbt run-operation export --args '{model_names: [jp_daily, pref, pref_daily], copy_options: [{format: Parquet}, {format: CSV, params: HEADER}]}'
+	dbt run-operation export \
+		--args "{ \
+			model_names: [jp_daily, pref, pref_daily], \
+			copy_options: [{format: Parquet}, {format: CSV, others: HEADER}] \
+			}"
 
 ga-commit:
 ifeq ($(MAKE_ENV),GITHUB_ACTIONS)

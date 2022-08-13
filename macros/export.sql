@@ -8,7 +8,7 @@
         {% for model_name in model_names %}
             {% set sql -%}
                 COPY {{ref(model_name)}} TO 'dist/{{model_name}}.{{copy_option.format | lower}}' 
-                    (FORMAT {{copy_option.format}} {%- if copy_option.param is defined %} ,{{copy_option.param }}{%- endif %});
+                    (FORMAT {{copy_option.format}} {%- if copy_option.others is defined %} ,{{copy_option.others }}{%- endif %});
             {%- endset %}
         
             {% do log(sql, info=True) %}

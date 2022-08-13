@@ -26,11 +26,11 @@ macros:
         type: "[string]"  
         description: Array of model name to be exported.
       - name: copy_options
-        type: "[{format: string, params: string}]"
+        type: "[{format: string, others: string}]"
         description: |- 
-          Array of export options as dict. For each element, `params` key is optional.
+          Array of export options as dict. For each element, `others` key is optional.
           
-          If passed, `params` will be embeded as-is into `COPY` statement at copy options.
+          If passed, `others` will be embeded as-is into `COPY` statement at copy options.
           
           `export` macro will iterate export operation for each `copy_options` for each `model_names`.
           
