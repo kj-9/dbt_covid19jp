@@ -3,4 +3,77 @@ version: 2
 
 models:
   - name: jp_daily
+    description: |-
+      Daily nation-level dataset of covid-19 situation in Japan.
+
+      Data Source
+        - [Toyo Keizai Online "Coronavirus Disease (COVID-19) Situation Report in Japan" by Kazuki OGIWARA (Originally from Japanese MHLW website)](https://toyokeizai.net/sp/visual/tko/covid19/)
+    columns:
+      - name: date
+        description: Date in JST, 日本時間での日付
+        tests:
+          - unique
+          - not_null
+      - name: tests
+        description: Number of tests, 検査実施人数
+      - name: newCases
+        description: Number of new cases, 陽性者数
+      - name: activeCases
+        description: Number of current active cases, 入院治療等を要する者の数
+      - name: severeCases
+        description: Number of current severe cases, 重症者数
+      - name: recovered
+        description: Total number of recovered cases, 退院又は療養解除となった者の数（累積）
+      - name: deaths
+        description: Total number of deaths, 死亡者数（累積）
+      - name: rt
+        description: Effective reproduction number, 実効再生産数
   - name: pref_daily
+    description: |-
+      Daily prefecture-level dataset of covid-19 situation in Japan.
+
+      Data Source
+        - [Toyo Keizai Online "Coronavirus Disease (COVID-19) Situation Report in Japan" by Kazuki OGIWARA (Originally from Japanese MHLW website)](https://toyokeizai.net/sp/visual/tko/covid19/)
+    tests:
+      - unique:
+          column_name: "(prefCode || '-' || date)"
+    columns:
+      - name: prefCode
+        description: Prefecture code, 都道府県番号
+        tests:
+          - not_null
+          - relationships:
+              to: ref('pref')
+              field: prefCode
+      - name: prefJP
+        description: Prefecture name in Japanese, 都道府県名(日本語)
+        tests:
+          - not_null
+          - relationships:
+              to: ref('pref')
+              field: prefJP
+      - name: prefEN
+        description: Prefecture name in English, 都道府県名(英語)
+        tests:
+          - not_null
+          - relationships:
+              to: ref('pref')
+              field: prefEN
+      - name: date
+        description: Date in JST, 日本時間での日付
+        tests:
+          - not_null
+      - name: tests
+        description: Total number of tests, PCR 検査実施人数 （累積）
+      - name: newCases
+        description: Total number of new cases, 陽性者数（累積）
+      - name: activeCases
+        description: Number of current active cases, 入院治療等を要する者の数
+      - name: severeCases
+        description: Number of current severe cases, 重症者数
+      - name: recovered
+        description: Total number of recovered cases, 退院又は療養解除となった者の数（累積）
+      - name: deaths
+        description: Total number of deaths, 死亡者数（累積）
+      - name: rt
+        description: Effective reproduction number, 実効再生産数
