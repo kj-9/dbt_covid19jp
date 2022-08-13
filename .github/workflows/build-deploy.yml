@@ -1,5 +1,5 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+name: Build, test and export data, deploy static content to Pages
 
 on:
   schedule:
@@ -21,7 +21,7 @@ concurrency:
 
 jobs:
   # Single deploy job since we're just deploying
-  deploy:
+  build-deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -35,13 +35,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Run dbt, output files
-        run: make export-all
+      - name: Run dbt and create db file
+        run: make db
+      - name: Run tests
+        run: make test
+      - name: Export files
+        run: make export
       - name: Commit output files
         run: |
           MAKE_ENV=GITHUB_ACTIONS make ga-commit
         continue-on-error: true
-      - name: Push commit
+      - name: push
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
