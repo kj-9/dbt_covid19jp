@@ -1,0 +1,36 @@
+version: 2
+
+macros:
+  - name: export
+    description: |-
+      Enable duckdb httpfs extension.
+
+      More detail: https://duckdb.org/docs/extensions/overview
+
+  - name: export
+    description: |-
+      Export duckdb models to files as specified format by `COPY` statement.
+      Files will exported at local directory dist/.
+
+      Argument example:
+      Export 2 models to CSV files:
+      - '{model_names: [pref, pref_daily], copy_options: [{format: CSV }]}'
+      CSV files with header:
+      - '{model_names: [pref, pref_daily], copy_options: [{format: CSV, param: HEADER }]}'
+      Export 1 model as Parquet file:
+      - '{model_names: [pref], copy_options: [{format: PARQUET }]}'
+
+      For more detail of `COPY` : https://duckdb.org/docs/sql/statements/copy
+    arguments:
+      - name: model_names
+        type: "[string]"  
+        description: Array of model name to be exported.
+      - name: copy_options
+        type: "[{format: string, params: string}]"
+        description: |- 
+          Array of export options as dict. For each element, `params` key is optional.
+          
+          If passed, `params` will be embeded as-is into `COPY` statement at copy options.
+          
+          `export` macro will iterate export operation for each `copy_options` for each `model_names`.
+          
