@@ -10,3 +10,6 @@ venv
 
 # duckdb artifact
 .db/*.duckdb
+
+# vscode
+.vscode/*.log
