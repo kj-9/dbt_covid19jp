@@ -1,12 +1,14 @@
 # dbt_covid19jp : dbt package for Japanese Covid-19 Datasets
 
 This package provides ready to use Japanese covid-19 datasets.
+CSV/PARQUET format files are available at [dist](https://github.com/kj-9/dbt_covid19jp/tree/main/dist) directory.
 
-[Go to Docs site](kj-9.github.io/dbt_covid19jp/)
+[Go to Docs site](https://kj-9.github.io/dbt_covid19jp/)
 
-- `jp_daily`: Daily nation-level dataset of covid-19 situation in Japanese.
-- `pref_daily`: Daily prefecture-level dataset of covid-19 situation in Japanese.
-- `pref`: Master dataset for Japanese prefectures.
+
+- [`jp_daily`](https://kj-9.github.io/dbt_covid19jp/#!/model/model.dbt_covid19jp.jp_daily): Daily nation-level dataset of covid-19 situation in Japanese.
+- [`pref_daily`](https://kj-9.github.io/dbt_covid19jp/#!/model/model.dbt_covid19jp.pref_daily): Daily prefecture-level dataset of covid-19 situation in Japanese.
+- [`pref`](https://kj-9.github.io/dbt_covid19jp/#!/seed/seed.dbt_covid19jp.pref): Master dataset for Japanese prefectures.
 
 
 WIP:
@@ -14,8 +16,6 @@ WIP:
 
 
 ## Notes
-
-- CSV/PARQUET format files are also available [here](https://github.com/kj-9/dbt_covid19jp/tree/main/dist).
 - Due to the data source format changes, updating datasets in development version might delay.
 
 
