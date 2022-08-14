@@ -32,26 +32,35 @@ jobs:
         uses: actions/checkout@v3
       - name: setup python
         uses: actions/setup-python@v4 # python version is set default by .python-version file
-      - name: Install dependencies
+      - name: Install python packages
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Run dbt and create db file
         run: make db
-      - name: Run tests
+      - name: Run dbt test
         id: run_test
         run: make test
         continue-on-error: true
-      - name: If tests failed, add comment to the issue
+
+      # if dbt test failed, post comment to the issue #1
+      - name: Render issue comment template
         if: ${{ steps.run_test.outcome == 'failure' }}
-        uses: peter-evans/create-or-update-comment@v2
+        id: template
+        uses: chuhlomin/render-template@v1.4
         with:
-          issue-number: 1
           template: .github/comment-template.md
           vars: |
             GITHUB_SERVER_URL: $GITHUB_SERVER_URL
             GITHUB_REPOSITORY: $GITHUB_REPOSITORY
             GITHUB_RUN_ID: $GITHUB_RUN_ID
+      - name: Post comment to the issue
+        if: ${{ steps.run_test.outcome == 'failure' }}
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          issue-number: 1
+
+      # Export, commit files
       - name: Export files
         run: make export
       - name: Commit output files
@@ -59,13 +68,14 @@ jobs:
         run: |
           MAKE_ENV=GITHUB_ACTIONS make ga-commit
         continue-on-error: true
+
+      # If committing files succeeded, push to main branch and deploy site
       - name: push
         if: ${{ steps.commit_output.outcome == 'success' }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
-        continue-on-error: true
       - name: Build docs
         if: ${{ steps.commit_output.outcome == 'success' }}
         run: make docs
