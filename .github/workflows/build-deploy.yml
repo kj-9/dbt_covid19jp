@@ -77,18 +77,16 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
+
+      # Build docs
       - name: Build docs
-        if: ${{ steps.commit_output.outcome == 'success' }}
-        run: make docs
+        run:  make docs-nocompile # assuming compiled already since we run `dbt run`
       - name: Setup Pages
-        if: ${{ steps.commit_output.outcome == 'success' }}
         uses: actions/configure-pages@v1
       - name: Upload artifact
-        if: ${{ steps.commit_output.outcome == 'success' }}
         uses: actions/upload-pages-artifact@v1
         with:
           path: './target'
       - name: Deploy to GitHub Pages
-        if: ${{ steps.commit_output.outcome == 'success' }}
         id: deployment
         uses: actions/deploy-pages@main
