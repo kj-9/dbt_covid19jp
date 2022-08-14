@@ -47,9 +47,11 @@ jobs:
         uses: peter-evans/create-or-update-comment@v2
         with:
           issue-number: 1
-          body: |
-            `dbt test` command failed.
-            Check the [link to log](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}).
+          template: .github/comment-template.md
+          vars: |
+            GITHUB_SERVER_URL: $GITHUB_SERVER_URL
+            GITHUB_REPOSITORY: $GITHUB_REPOSITORY
+            GITHUB_RUN_ID: $GITHUB_RUN_ID
       - name: Export files
         run: make export
       - name: Commit output files
