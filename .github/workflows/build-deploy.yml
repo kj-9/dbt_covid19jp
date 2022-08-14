@@ -49,6 +49,7 @@ jobs:
           body: |
             `dbt test` command failed.
             Check the [link to log](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}).
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Export files
         run: make export
       - name: Commit output files
