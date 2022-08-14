@@ -38,10 +38,11 @@ jobs:
       - name: Run dbt and create db file
         run: make db
       - name: Run tests
+        id: run_test
         run: make test
         continue-on-error: true
       - name: If tests failed, add comment to the issue
-        if: ${{ steps.error_execution.outcome == 'failure' }}
+        if: ${{ steps.run_test.outcome == 'failure' }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           issue-number: 1
@@ -51,23 +52,29 @@ jobs:
       - name: Export files
         run: make export
       - name: Commit output files
+        id: commit_output
         run: |
           MAKE_ENV=GITHUB_ACTIONS make ga-commit
         continue-on-error: true
       - name: push
+        if: ${{ steps.commit_output.outcome == 'success' }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
         continue-on-error: true
       - name: Build docs
+        if: ${{ steps.commit_output.outcome == 'success' }}
         run: make docs
       - name: Setup Pages
+        if: ${{ steps.commit_output.outcome == 'success' }}
         uses: actions/configure-pages@v1
       - name: Upload artifact
+        if: ${{ steps.commit_output.outcome == 'success' }}
         uses: actions/upload-pages-artifact@v1
         with:
           path: './target'
       - name: Deploy to GitHub Pages
+        if: ${{ steps.commit_output.outcome == 'success' }}
         id: deployment
         uses: actions/deploy-pages@main
