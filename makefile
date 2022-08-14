@@ -11,6 +11,7 @@ export DBT_PROFILES_DIR=./
 	docs-nocompile
 	docs-preview
 	test
+	test-store
 	export
 	ga-commit
 
@@ -35,6 +36,9 @@ docs-preview:
 	dbt docs generate && dbt docs serve
 
 test:
+	dbt test
+	
+test-store:
 	dbt test --store-failures
 
 export:
