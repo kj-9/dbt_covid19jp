@@ -44,6 +44,7 @@ export:
 			copy_options: [{format: Parquet}, {format: CSV, others: HEADER}] \
 			}"
 
+# for github actions workflow
 ga-commit:
 ifeq ($(MAKE_ENV),GITHUB_ACTIONS)
 	git config --local user.email "action@github.com"
