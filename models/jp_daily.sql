@@ -1,27 +1,42 @@
 {% set base_url = "https://toyokeizai.net/sp/visual/tko/covid19/csv/"  %}
 {% set files = [
-  "pcr_tested_daily.csv",
   "pcr_positive_daily.csv",
-  "cases_total.csv",
   "severe_daily.csv",
   "death_total.csv",
-  "recovery_total.csv",
   "effective_reproduction_number.csv"
 ] %}
 
+WITH update AS (
+  SELECT 
+  "日付" AS "date"
+  ,NULL AS tests
+  ,"PCR 検査陽性者数(単日)" AS newCases
+  ,NULL AS activeCases
+  ,"重症者数" AS severeCases
+  ,NULL AS recovered
+  ,"死亡者数" AS deaths
+  ,"実効再生産数" AS rt
+  FROM {% for file in files %}
+          {%- if loop.first %} '{{base_url}}{{file}}'
+          {%- else %} FULL JOIN (SELECT * FROM '{{base_url}}{{file}}') USING (日付)
+          {%- endif %}
+      {% endfor %}
+  ORDER BY "date"
+),
+v1 AS (
+  SELECT * FROM {{ ref('jp_daily_v1') }}
+)
 
 SELECT 
-"日付" AS "date"
-,"PCR 検査実施人数(単日)" AS tests
-,"PCR 検査陽性者数(単日)" AS newCases
-,"入院治療を要する者" AS activeCases
-,"重症者数" AS severeCases
-,"死亡者数" AS recovered
-,"退院、療養解除となった者" AS deaths
-,"実効再生産数" AS rt
-FROM {% for file in files %}
-        {%- if loop.first %} '{{base_url}}{{file}}'
-        {%- else %} FULL JOIN (SELECT * FROM '{{base_url}}{{file}}') USING (日付)
-        {%- endif %}
-    {% endfor %}
+  COALESCE(update."date", v1."date")::DATE AS date
+  ,COALESCE(update.tests, v1.tests)::INTEGER AS tests
+  ,COALESCE(update.newCases, v1.newCases)::INTEGER AS newCases
+  ,COALESCE(update.activeCases, v1.activeCases)::INTEGER AS activeCases
+  ,COALESCE(update.severeCases, v1.severeCases)::INTEGER AS severeCases
+  ,COALESCE(update.recovered, v1.recovered)::INTEGER AS recovered
+  ,COALESCE(update.deaths, v1.deaths)::INTEGER AS deaths
+  ,COALESCE(update.rt, v1.rt)::DOUBLE AS rt
+FROM update
+  FULL JOIN v1 USING ("date")
+
 ORDER BY "date"
