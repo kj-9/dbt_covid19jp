@@ -1,6 +1,4 @@
 {% macro export(model_names, copy_options) %}
-    {% do log("enabling httpfs extentions...", info=True) %}
-    {{ enable_httpfs() }}
 
     {% do log("exporting models: " ~ model_names ~ " x options:" ~ copy_options, info=True) %}
 
