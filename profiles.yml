@@ -3,7 +3,7 @@ dbt_covid19jp:
   outputs:
     dev:
       type: duckdb
-      path: '.db/temp.duckdb'
+      path: '.db/dbt.duckdb'
       extensions:
         - httpfs
       #optional fields
